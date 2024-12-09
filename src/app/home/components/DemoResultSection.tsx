@@ -12,6 +12,49 @@ interface CarouselProps {
   interval?: number;
 }
 
+// 添加默认示例数据
+const DEFAULT_RESULTS = [
+  {
+    score: 85,
+    matches: [
+      { key: "性格特征", value: "开朗大方" },
+      { key: "兴趣爱好", value: "旅行、美食" },
+      { key: "价值观", value: "积极向上" }
+    ],
+    suggestions: [
+      "你们都很喜欢尝试新事物",
+      "共同的兴趣爱好是很好的交流话题",
+      "建议多分享各自的生活经历"
+    ]
+  },
+  {
+    score: 92,
+    matches: [
+      { key: "生活方式", value: "规律作息" },
+      { key: "未来规划", value: "事业为重" },
+      { key: "沟通方式", value: "直接坦诚" }
+    ],
+    suggestions: [
+      "工作理念��契合",
+      "都很注重生活质量",
+      "建议制定共同的目标"
+    ]
+  },
+  {
+    score: 78,
+    matches: [
+      { key: "家庭观念", value: "重视亲情" },
+      { key: "消费习惯", value: "理性消费" },
+      { key: "休闲方式", value: "居家为主" }
+    ],
+    suggestions: [
+      "对家庭的重视程度相似",
+      "经济观念比较一致",
+      "可以多创造共处的时光"
+    ]
+  }
+];
+
 const ResultCarousel: React.FC<CarouselProps> = ({ 
   items, 
   autoPlay = true, 
@@ -95,21 +138,21 @@ const ResultCarousel: React.FC<CarouselProps> = ({
 
   return (
     <div 
-      className="relative overflow-hidden w-full"
+      className="relative overflow-hidden w-full h-[400px]"
       tabIndex={0}
       onKeyDown={handleKeyDown}
       role="region"
       aria-label="示例结果轮播"
     >
       <div 
-        className="flex transition-transform duration-500 ease-in-out"
+        className="flex transition-transform duration-500 ease-in-out h-full"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         {items.map((item, index) => (
-          <div key={index} className="w-full flex-shrink-0 px-4">
+          <div key={index} className="w-full flex-shrink-0 flex items-center justify-center px-[75px]">
             <ResultCard 
               data={item}
               isFlipped={flippedIndices[index]}
@@ -121,14 +164,14 @@ const ResultCarousel: React.FC<CarouselProps> = ({
       
       <button
         onClick={prevSlide}
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-lg hover:bg-white"
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-lg hover:bg-white"
         aria-label="上一个"
       >
         <ChevronLeftIcon className="w-6 h-6" />
       </button>
       <button
         onClick={nextSlide} 
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-lg hover:bg-white"
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-lg hover:bg-white"
         aria-label="下一个"
       >
         <ChevronRightIcon className="w-6 h-6" />
@@ -150,7 +193,7 @@ const ResultCarousel: React.FC<CarouselProps> = ({
 
 export default function DemoResultSection({
   id,
-  results,
+  results = DEFAULT_RESULTS,
   statistics
 }: DemoResultSectionProps) {
   return (
@@ -163,7 +206,7 @@ export default function DemoResultSection({
           看看AI是如何分析和预测的
         </p>
 
-        <div className="max-w-6xl mx-auto mb-16">
+        <div className="w-[450px] mx-auto mb-16 h-[400px]">
           <ResultCarousel items={results} />
         </div>
 
