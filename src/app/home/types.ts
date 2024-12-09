@@ -30,15 +30,12 @@ export interface IntroductionSectionProps {
 
 export interface MatchPoint {
   key: string;
-  value: string;
+  value: number;
 }
 
 export interface ResultCardData {
   score: number;
-  matches: Array<{
-    key: string;
-    value: string;
-  }>;
+  matches: MatchPoint[];
   suggestions: string[];
 }
 

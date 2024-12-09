@@ -13,44 +13,44 @@ interface CarouselProps {
 }
 
 // 添加默认示例数据
-const DEFAULT_RESULTS = [
+export const DEFAULT_RESULTS = [
   {
     score: 85,
     matches: [
-      { key: "性格特征", value: "开朗大方" },
-      { key: "兴趣爱好", value: "旅行、美食" },
-      { key: "价值观", value: "积极向上" }
+      { key: "性格特征", value: 92 },
+      { key: "兴趣爱好", value: 88 },
+      { key: "价值观", value: 85 }
     ],
     suggestions: [
-      "你们都很喜欢尝试新事物",
-      "共同的兴趣爱好是很好的交流话题",
-      "建议多分享各自的生活经历"
+      "你们都是愿意尝试新事物的性格，这种开放性格会让你们的生活充满乐趣和惊喜。建议多一起参与新鲜的体验，比如尝试不同风格的美食、探索陌生的旅行地点等。",
+      "共同的兴趣爱好是维系感情的重要纽带。你们在旅行和美食方面有很高的契合度，可以一起规划周末美食之旅，或者制定长期的旅行计划，这将帮助你们建立更多共同话题。",
+      "建议多分享各自的生活经历和感受，特别是工作中的有趣故事或者生活中的小发现。这种分享不仅能增进了解，还能培养共同成长的默契。"
     ]
   },
   {
     score: 92,
     matches: [
-      { key: "生活方式", value: "规律作息" },
-      { key: "未来规划", value: "事业为重" },
-      { key: "沟通方式", value: "直接坦诚" }
+      { key: "生活方式", value: 95 },
+      { key: "未来规划", value: 90 },
+      { key: "沟通方式", value: 88 }
     ],
     suggestions: [
-      "工作理念��契合",
-      "都很注重生活质量",
-      "建议制定共同的目标"
+      "你们对工作和事业的理念高度一致，都注重个人发展和职业规划。建议定期交流各自的职业目标和发展方向，互相支持和鼓励，共同规划未来的职业道路。",
+      "生活品质的追求是你们的共同点，都很注重生活的精致感和仪式感。可以一起布置居住空间，创造温馨的生活氛围，也可以共同养成健康的生活习惯，如一起晨跑或健身。",
+      "建议制定明确的共同目标，比如三年内的置业计划、旅行规划或者技能提升目标。定期回顾和调整这些目标，让你们的感情在共同奋斗中更加稳固。"
     ]
   },
   {
     score: 78,
     matches: [
-      { key: "家庭观念", value: "重视亲情" },
-      { key: "消费习惯", value: "理性消费" },
-      { key: "休闲方式", value: "居家为主" }
+      { key: "家庭观念", value: 82 },
+      { key: "消费习惯", value: 75 },
+      { key: "休闲方式", value: 78 }
     ],
     suggestions: [
-      "对家庭的重视程度相似",
-      "经济观念比较一致",
-      "可以多创造共处的时光"
+      "你们对家庭的重视程度相似，都很看重亲情关系。建议多创造机会与对方家庭互动，可以定期组织家庭聚会，或者一起参与家庭活动，这将有助于建立更深厚的感情基础。",
+      "在消费理财方面，你们都倾向于理性规划。建议一起制定详细的理财计划，包括日常开支预算、储蓄目标和投资策略，这样可以避免因金钱问题产生分歧。",
+      "休闲时光的共处方式需要更多探索和调整。建议尝试不同的居家活动，如一起下厨、园艺或者观影，找到能让双方都感到放松和享受的相处方式。"
     ]
   }
 ];
@@ -176,17 +176,6 @@ const ResultCarousel: React.FC<CarouselProps> = ({
       >
         <ChevronRightIcon className="w-6 h-6" />
       </button>
-      
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-        {items.map((_, index) => (
-          <div
-            key={index}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              index === currentIndex ? 'bg-primary' : 'bg-gray-300'
-            }`}
-          />
-        ))}
-      </div>
     </div>
   );
 };
@@ -206,7 +195,7 @@ export default function DemoResultSection({
           看看AI是如何分析和预测的
         </p>
 
-        <div className="w-[450px] mx-auto mb-16 h-[400px]">
+        <div className="w-[600px] mx-auto mb-16 h-[400px]">
           <ResultCarousel items={results} />
         </div>
 

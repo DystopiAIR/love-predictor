@@ -3,18 +3,37 @@
 import { motion } from 'framer-motion';
 import { type ResultCardProps } from '../types';
 
+// 修改进度条组件
+const ProgressBar = ({ value }: { value: number }) => {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex-1 h-4 bg-gray-100 rounded overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${value}%` }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="h-full bg-gradient-to-r from-rose-500 to-pink-500"
+        />
+      </div>
+      <div className="w-12 text-sm font-medium text-gray-700 text-right">
+        {value}%
+      </div>
+    </div>
+  );
+};
+
 export default function ResultCard({
   data: { score, matches, suggestions },
   isFlipped,
   onFlip,
 }: ResultCardProps) {
   return (
-    <div className="w-[300px] bg-white rounded-xl shadow-lg overflow-hidden">
+    <div className="w-[500px] bg-white rounded-xl shadow-lg overflow-hidden">
       <motion.div
         initial={false}
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6 }}
-        className="relative w-full h-[300px] cursor-pointer"
+        className="relative w-full h-[400px] cursor-pointer"
         onClick={onFlip}
         style={{ 
           // @ts-ignore
@@ -26,22 +45,26 @@ export default function ResultCard({
           className="absolute inset-0 bg-white"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <div className="p-6 h-full flex flex-col">
+          <div className="p-8 h-full flex flex-col">
             <div className="flex-1">
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold gradient-text mb-2">{score}%</div>
-                <div className="text-gray-600">契合度</div>
+              <div className="text-center mb-8">
+                <div className="flex items-center justify-center gap-4">
+                  <div className="text-5xl font-bold gradient-text">{score}%</div>
+                  <div className="text-gray-600 text-lg">契合度</div>
+                </div>
               </div>
-              <div className="space-y-4">
-                {matches.slice(0, 3).map((match) => (
-                  <div key={match.key} className="flex justify-between items-center">
-                    <span className="text-gray-900">{match.key}</span>
-                    <span className="text-gray-600">{match.value}</span>
+              <div className="space-y-6">
+                {matches.map((match) => (
+                  <div key={match.key} className="space-y-2">
+                    <div className="text-base font-medium text-gray-700">
+                      {match.key}
+                    </div>
+                    <ProgressBar value={Number(match.value)} />
                   </div>
                 ))}
               </div>
             </div>
-            <div className="text-center text-sm text-gray-400 mt-4">
+            <div className="text-center text-base text-gray-400 mt-6">
               点击查看详细分析
             </div>
           </div>
@@ -49,24 +72,27 @@ export default function ResultCard({
 
         {/* 背面 */}
         <div 
-          className="absolute inset-0 bg-white"
+          className="absolute inset-0 bg-white overflow-y-auto"
           style={{ 
             backfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)'
           }}
         >
-          <div className="p-6 h-full flex flex-col">
+          <div className="p-8 h-full flex flex-col">
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">建议</h3>
-              <ul className="space-y-3">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">建议</h3>
+              <ul className="space-y-6">
                 {suggestions.map((suggestion, index) => (
-                  <li key={index} className="text-gray-600">
+                  <li 
+                    key={index} 
+                    className="text-gray-600 text-base leading-relaxed"
+                  >
                     {suggestion}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="text-center text-sm text-gray-400 mt-4">
+            <div className="text-center text-base text-gray-400 mt-6 pt-4 border-t border-gray-100">
               点击返回概览
             </div>
           </div>

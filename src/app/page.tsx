@@ -4,6 +4,7 @@ import { BrainCircuit, FileSpreadsheet, ChartPieIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Suspense, useState, useEffect } from 'react';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { DEFAULT_RESULTS } from './home/components/DemoResultSection';
 
 const HeroSection = dynamic(() => import('./home/components/HeroSection'));
 const IntroductionSection = dynamic(() => import('./home/components/IntroductionSection'), {
@@ -148,47 +149,7 @@ export default function Home() {
     }
   ];
 
-  const demoResults = [
-    {
-      score: 85,
-      matches: [
-        { key: '性格特征', value: '高度匹配' },
-        { key: '价值观', value: '非常相似' },
-        { key: '生活方式', value: '较为契合' }
-      ],
-      suggestions: [
-        '你们都是善解人意的性格，沟通会很顺畅',
-        '共同的价值观是系关系的重要基础',
-        '在生活习惯上可能需要一些小调整'
-      ]
-    },
-    {
-      score: 92,
-      matches: [
-        { key: '兴趣爱好', value: '完美契合' },
-        { key: '沟通方式', value: '高度匹配' },
-        { key: '未来规划', value: '目标一致' }
-      ],
-      suggestions: [
-        '共同的兴趣爱好将让你们的关系更加稳固',
-        '良好的沟通基础有助于解决问题',
-        '对未来的共同规划是感情长久的保障'
-      ]
-    },
-    {
-      score: 78,
-      matches: [
-        { key: '性格互补', value: '较好' },
-        { key: '生活节奏', value: '有差异' },
-        { key: '共同话题', value: '丰富' }
-      ],
-      suggestions: [
-        '性格上的互补可以带来新鲜感',
-        '需要在生活节奏上相互理解和调整',
-        '丰富的共同话题有助于维持感情新鲜度'
-      ]
-    }
-  ];
+  const demoResults = DEFAULT_RESULTS;
 
   const statistics = {
     totalUsers: 10000,
