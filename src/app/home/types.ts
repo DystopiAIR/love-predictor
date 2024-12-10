@@ -62,5 +62,4 @@ export interface CallToActionProps {
   onPrimaryClick: () => void;
   onSecondaryClick: () => void;
   showRegister?: boolean;
-  socialShare?: boolean;
 } 

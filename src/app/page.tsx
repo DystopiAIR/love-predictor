@@ -1,201 +1,141 @@
 'use client';
 
-import { BrainCircuit, FileSpreadsheet, ChartPieIcon } from 'lucide-react';
-import dynamic from 'next/dynamic';
-import { Suspense, useState, useEffect } from 'react';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { DEFAULT_RESULTS } from './home/components/DemoResultSection';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { BrainCircuit, ChartPieIcon, FileSpreadsheet } from 'lucide-react';
+import ResultCard from './home/components/ResultCard';
 
-const HeroSection = dynamic(() => import('./home/components/HeroSection'));
-const IntroductionSection = dynamic(() => import('./home/components/IntroductionSection'), {
-  ssr: true,
-  loading: () => (
-    <div className="py-20 animate-pulse">
-      <div className="container mx-auto px-4">
-        <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto mb-12"></div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-64 bg-gray-200 rounded"></div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-});
-const DemoResultSection = dynamic(() => import('./home/components/DemoResultSection'), {
-  ssr: true,
-  loading: () => (
-    <div className="py-20 bg-gradient-to-b from-bg-card to-white animate-pulse">
-      <div className="container mx-auto px-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-12"></div>
-        <div className="max-w-sm mx-auto h-80 bg-gray-200 rounded"></div>
-      </div>
-    </div>
-  )
-});
-const CallToActionSection = dynamic(() => import('./home/components/CallToActionSection'), {
-  ssr: true,
-  loading: () => (
-    <div className="py-20 animate-pulse">
-      <div className="container mx-auto px-4 text-center">
-        <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto mb-8"></div>
-        <div className="flex justify-center gap-4">
-          <div className="h-12 w-32 bg-gray-200 rounded-full"></div>
-          <div className="h-12 w-32 bg-gray-200 rounded-full"></div>
-        </div>
-      </div>
-    </div>
-  )
-});
-
-function ScrollProgress() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const winScroll = document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      setProgress(scrolled);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
-      <div 
-        className="h-full bg-gradient-to-r from-primary to-secondary transition-all duration-300"
-        style={{ width: `${progress}%` }}
-      />
-    </div>
-  );
-}
-
-const preloadComponents = () => {
-  const components = [
-    () => import('./home/components/HeroSection'),
-    () => import('./home/components/IntroductionSection'),
-    () => import('./home/components/DemoResultSection'),
-    () => import('./home/components/CallToActionSection'),
-  ];
-  
-  components.forEach(comp => {
-    const prefetch = () => {
-      comp();
-      window.removeEventListener('mousemove', prefetch);
-    };
-    window.addEventListener('mousemove', prefetch);
-  });
-};
+// 示例结果数据
+const demoResults = [
+  {
+    score: 85,
+    matches: [
+      { key: '性格匹配', value: 90 },
+      { key: '价值观契合', value: 85 },
+      { key: '生活方式', value: 80 }
+    ],
+    suggestions: [
+      '你们在性格上非常契合,建议多交流共同兴趣',
+      '在价值观方面有较高的一致性,可以深入探讨未来规划',
+      '生活方式略有差异,需要互相理解和适应'
+    ]
+  }
+];
 
 export default function Home() {
-  useEffect(() => {
-    preloadComponents();
-  }, []);
-
-  const handleCtaClick = (section?: string) => {
-    const targetSection = document.getElementById(section || 'test-section');
-    if (targetSection) {
-      const offset = 80; // 考虑固定导航栏的高度
-      const targetPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - offset;
-      
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  const features = [
-    {
-      icon: <BrainCircuit size={32} />,
-      title: "AI算法分析",
-      description: "先进的机器学习算法，精准分析性格特征"
-    },
-    {
-      icon: <ChartPieIcon size={32} />,
-      title: "快速精准匹配",
-      description: "多维度数据分析，找到最适合的伴侣"
-    },
-    {
-      icon: <FileSpreadsheet size={32} />,
-      title: "科学评估体系",
-      description: "基于心理学理论的专业评估体系"
-    }
-  ];
-
-  const steps = [
-    {
-      step: 1,
-      icon: <FileSpreadsheet size={32} />,
-      title: "完成测试问卷",
-      description: "简单的性格测试和价值观调查"
-    },
-    {
-      step: 2,
-      icon: <BrainCircuit size={32} />,
-      title: "AI分析处理",
-      description: "智能算法分析你的性格特征"
-    },
-    {
-      step: 3,
-      icon: <ChartPieIcon size={32} />,
-      title: "获取详细报告",
-      description: "查看完整的匹配分析报告"
-    }
-  ];
-
-  const demoResults = DEFAULT_RESULTS;
-
-  const statistics = {
-    totalUsers: 10000,
-    successMatches: 2000,
-    accuracy: 95
-  };
-
   return (
-    <main className="min-h-screen relative">
-      <ScrollProgress />
-      <ErrorBoundary>
-        <Suspense fallback={null}>
-          <HeroSection 
-            title="AI智能婚恋契合度预测"
-            subtitle="科技赋能，助你找到真爱"
-            ctaText="开始测试"
-            onCtaClick={() => handleCtaClick('intro-section')}
-            backgroundType="gradient"
-          />
-        </Suspense>
-      </ErrorBoundary>
-      <Suspense fallback={null}>
-        <IntroductionSection 
-          id="intro-section"
-          features={features}
-          steps={steps}
-        />
-      </Suspense>
-      <Suspense fallback={null}>
-        <DemoResultSection
-          id="demo-section"
-          results={demoResults}
-          statistics={statistics}
-        />
-      </Suspense>
-      <Suspense fallback={null}>
-        <CallToActionSection
-          id="test-section"
-          primaryText="立即开始测试"
-          secondaryText="了解更多"
-          onPrimaryClick={() => handleCtaClick('test-section')}
-          onSecondaryClick={() => handleCtaClick('demo-section')}
-          showRegister={true}
-          socialShare={true}
-        />
-      </Suspense>
+    <main className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative min-h-[80vh] flex items-center justify-center">
+        <div className="container mx-auto px-4 text-center">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl font-bold mb-6 gradient-text"
+          >
+            AI智能婚恋契合度测试
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-gray-600 mb-8"
+          >
+            科学的测试方法，帮你找到最适合的伴侣
+          </motion.p>
+          <Link href="/test">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 bg-gradient-to-r from-brand-primary to-brand-secondary text-white rounded-full font-medium text-lg shadow-lg"
+            >
+              开始测试
+            </motion.button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">特色功能</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <BrainCircuit size={32} />,
+                title: "AI算法分析",
+                description: "先进的机器学习算法，精准分析性格特征"
+              },
+              {
+                icon: <ChartPieIcon size={32} />,
+                title: "快速精准匹配",
+                description: "多维度数据分析，找到最适合的伴侣"
+              },
+              {
+                icon: <FileSpreadsheet size={32} />,
+                title: "科学评估体系",
+                description: "基于心理学理论的专业评估体系"
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2 }}
+                className="text-center p-6"
+              >
+                <div className="w-16 h-16 mx-auto mb-4 text-brand-primary bg-brand-primary/10 rounded-full flex items-center justify-center">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Result Section */}
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4 gradient-text">
+            示例结果
+          </h2>
+          <p className="text-gray-600 text-center mb-12">
+            看看AI是如何分析和预测的
+          </p>
+
+          <div className="flex justify-center">
+            <ResultCard
+              data={demoResults[0]}
+              isFlipped={false}
+              onFlip={() => {}}
+            />
+          </div>
+
+          {/* 统计数据 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mt-16">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-brand-primary mb-2">
+                10,000+
+              </div>
+              <div className="text-gray-600">用户总数</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-brand-primary mb-2">
+                8,500+
+              </div>
+              <div className="text-gray-600">成功匹配</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-brand-primary mb-2">
+                85%
+              </div>
+              <div className="text-gray-600">准确率</div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

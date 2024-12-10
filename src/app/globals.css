@@ -18,10 +18,4 @@
            hover:opacity-90 transition-all duration-300
            active:scale-95 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-opacity-50;
   }
-  
-  .btn-secondary {
-    @apply px-6 py-3 border-2 border-brand-primary text-brand-primary rounded-full
-           hover:bg-brand-primary hover:text-white transition-all duration-300
-           active:scale-95 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-opacity-50;
-  }
 }
