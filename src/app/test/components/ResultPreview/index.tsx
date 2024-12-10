@@ -28,8 +28,31 @@ export default function ResultPreview({ result, onRetry, onShare }: ResultPrevie
         <h2 className="text-3xl font-bold text-gray-900 mb-2">
           你的契合度得分
         </h2>
-        <div className="text-5xl font-bold gradient-text">
-          {result.score}%
+        <div className="flex items-center justify-center gap-4">
+          <div className="relative">
+            <svg width="200" height="80" className="transform translate-x-[20px]">
+              <defs>
+                <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style={{ stopColor: '#FF6B6B' }} />
+                  <stop offset="100%" style={{ stopColor: '#4ECDC4' }} />
+                </linearGradient>
+              </defs>
+              <text
+                x="50%"
+                y="60"
+                fontSize="48"
+                fontWeight="bold"
+                fill="url(#scoreGradient)"
+                textAnchor="middle"
+                style={{ fontFamily: 'sans-serif' }}
+              >
+                {result.score}%
+              </text>
+            </svg>
+          </div>
+          <div className="text-gray-600 text-lg translate-x-[10px]">
+            契合度
+          </div>
         </div>
       </div>
 

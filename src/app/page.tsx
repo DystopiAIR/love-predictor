@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { BrainCircuit, ChartPieIcon, FileSpreadsheet } from 'lucide-react';
+import { BrainCircuit, PieChart, FileSpreadsheet } from 'lucide-react';
 import ResultCard from './home/components/ResultCard';
 
 // 示例结果数据
@@ -67,7 +67,7 @@ export default function Home() {
                 description: "先进的机器学习算法，精准分析性格特征"
               },
               {
-                icon: <ChartPieIcon size={32} />,
+                icon: <PieChart size={32} />,
                 title: "快速精准匹配",
                 description: "多维度数据分析，找到最适合的伴侣"
               },

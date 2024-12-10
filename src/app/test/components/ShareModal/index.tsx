@@ -28,6 +28,7 @@ export default function ShareModal({ imageUrl, isOpen, onClose }: ShareModalProp
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
             <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
@@ -45,19 +46,20 @@ export default function ShareModal({ imageUrl, isOpen, onClose }: ShareModalProp
               </div>
               
               {/* 截图预览 */}
-              <div className="p-4 overflow-auto">
-                <img
-                  src={imageUrl}
-                  alt="测试结果"
-                  className="w-full rounded-lg shadow-md"
-                />
+              <div className="p-4">
+                <div className="rounded-lg overflow-hidden shadow-md">
+                  <img
+                    src={imageUrl}
+                    alt="测试结果"
+                    className="w-full"
+                  />
+                </div>
               </div>
               
               {/* 操作按钮 */}
               <div className="p-4 border-t flex justify-end gap-4">
                 <button
                   onClick={() => {
-                    // 下载图片
                     const link = document.createElement('a');
                     link.href = imageUrl;
                     link.download = '测试结果.png';
@@ -69,7 +71,6 @@ export default function ShareModal({ imageUrl, isOpen, onClose }: ShareModalProp
                 </button>
                 <button
                   onClick={() => {
-                    // 复制图片到剪贴板
                     navigator.clipboard.writeText(imageUrl)
                       .then(() => alert('已复制到剪贴板'))
                       .catch(() => alert('复制失败'));

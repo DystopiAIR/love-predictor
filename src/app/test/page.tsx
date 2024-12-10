@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useDragControls } from 'framer-motion';
 import { useTestData } from './hooks/useTestData';
 import { useTestProgress } from './hooks/useTestProgress';
@@ -13,6 +13,8 @@ import { Option } from './types';
 import { calculateResult } from './utils/calculateResult';
 import { useTestValidation } from './hooks/useTestValidation';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import html2canvas from 'html2canvas';
+import ShareModal from './components/ShareModal';
 
 const DRAG_THRESHOLD = 50; // 拖动阈值
 
@@ -21,6 +23,9 @@ export default function TestPage() {
   const { progress, updateProgress, goToQuestion } = useTestProgress(mockQuestions.length);
   const [isLoading, setIsLoading] = useState(true);
   const [showResult, setShowResult] = useState(false);
+  const [shareImage, setShareImage] = useState<string>('');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   // 添加数据验证
   useTestValidation(data);
@@ -82,25 +87,43 @@ export default function TestPage() {
   }, [clearData, goToQuestion]);
 
   // 处理分享
-  const handleShare = useCallback(() => {
-    // 这里可以实现分享逻辑，比如：
-    // 1. 复制链接到剪贴板
-    // 2. 打开分享弹窗
-    // 3. 生成分享图片等
-    alert('分享功能开发中...');
+  const handleShare = useCallback(async () => {
+    if (resultRef.current) {
+      try {
+        const canvas = await html2canvas(resultRef.current, {
+          useCORS: true,     // 允许跨域
+          background: '#fff' // 设置背景色
+        });
+        
+        const image = canvas.toDataURL('image/png', 1.0);
+        setShareImage(image);
+        setIsShareModalOpen(true);
+      } catch (error) {
+        console.error('截图失败:', error);
+        alert('生成分享图片失败，请重试');
+      }
+    }
   }, []);
 
   if (showResult && testResult) {
     return (
-      <div className="py-8 px-4">
-        <div className="container mx-auto max-w-2xl">
-          <ResultPreview
-            result={testResult}
-            onRetry={handleRetry}
-            onShare={handleShare}
-          />
+      <>
+        <div className="py-8 px-4">
+          <div id="result-container" className="container mx-auto max-w-2xl" ref={resultRef}>
+            <ResultPreview
+              result={testResult}
+              onRetry={handleRetry}
+              onShare={handleShare}
+            />
+          </div>
         </div>
-      </div>
+
+        <ShareModal
+          imageUrl={shareImage}
+          isOpen={isShareModalOpen}
+          onClose={() => setIsShareModalOpen(false)}
+        />
+      </>
     );
   }
 
