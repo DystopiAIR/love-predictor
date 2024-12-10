@@ -3,6 +3,22 @@ import { TestData, Question, Answer, Option } from '../types';
 
 const STORAGE_KEY = 'test_data';
 
+// 创建初始状态的工厂函数
+const createInitialState = (questions: Question[]): TestData => ({
+  questions,
+  answers: {},
+  progress: {
+    currentQuestionIndex: 0,
+    totalQuestions: questions.length,
+    answers: {},
+    sectionProgress: {
+      personality: 0,
+      values: 0,
+      requirements: 0
+    }
+  }
+});
+
 export function useTestData(initialQuestions: Question[]) {
   const [data, setData] = useState<TestData>(() => {
     // 尝试从 localStorage 恢复数据
@@ -17,20 +33,7 @@ export function useTestData(initialQuestions: Question[]) {
       }
     }
     
-    return {
-      questions: initialQuestions,
-      answers: {},
-      progress: {
-        currentQuestionIndex: 0,
-        totalQuestions: initialQuestions.length,
-        answers: {},
-        sectionProgress: {
-          personality: 0,
-          values: 0,
-          requirements: 0
-        }
-      }
-    };
+    return createInitialState(initialQuestions);
   });
 
   // 保存答案
@@ -61,23 +64,15 @@ export function useTestData(initialQuestions: Question[]) {
 
   // 清除数据
   const clearData = useCallback(() => {
+    // 完全重置到初始状态
+    const initialState = createInitialState(initialQuestions);
+    
+    // 清除 localStorage
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEY);
     }
-    setData({
-      questions: initialQuestions,
-      answers: {},
-      progress: {
-        currentQuestionIndex: 0,
-        totalQuestions: initialQuestions.length,
-        answers: {},
-        sectionProgress: {
-          personality: 0,
-          values: 0,
-          requirements: 0
-        }
-      }
-    });
+    
+    setData(initialState);
   }, [initialQuestions]);
 
   return {

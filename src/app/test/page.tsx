@@ -74,6 +74,36 @@ export default function TestPage() {
     }
   }, [progress.currentQuestionIndex, data.questions.length, goToQuestion]);
 
+  // 处理重新测试
+  const handleRetry = useCallback(() => {
+    clearData();           // 清除测试数据
+    setShowResult(false);  // 隐藏结果页
+    goToQuestion(0);      // 回到第一题
+  }, [clearData, goToQuestion]);
+
+  // 处理分享
+  const handleShare = useCallback(() => {
+    // 这里可以实现分享逻辑，比如：
+    // 1. 复制链接到剪贴板
+    // 2. 打开分享弹窗
+    // 3. 生成分享图片等
+    alert('分享功能开发中...');
+  }, []);
+
+  if (showResult && testResult) {
+    return (
+      <div className="py-8 px-4">
+        <div className="container mx-auto max-w-2xl">
+          <ResultPreview
+            result={testResult}
+            onRetry={handleRetry}
+            onShare={handleShare}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50">
@@ -82,18 +112,6 @@ export default function TestPage() {
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mb-4" />
               <p className="text-gray-600">加载中...</p>
-            </div>
-          </div>
-        ) : showResult && testResult ? (
-          <div className="py-8 px-4">
-            <div className="container mx-auto max-w-2xl">
-              <ResultPreview
-                result={testResult}
-                onRetry={() => {
-                  clearData();
-                  setShowResult(false);
-                }}
-              />
             </div>
           </div>
         ) : (

@@ -1,14 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Share2 } from 'lucide-react';
 import { TestResult } from '../../types';
 
 interface ResultPreviewProps {
   result: TestResult;
   onRetry?: () => void;
+  onShare?: () => void;
 }
 
-export default function ResultPreview({ result, onRetry }: ResultPreviewProps) {
+export default function ResultPreview({ result, onRetry, onShare }: ResultPreviewProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -78,16 +80,29 @@ export default function ResultPreview({ result, onRetry }: ResultPreviewProps) {
         </ul>
       </div>
 
-      {onRetry && (
+      <div className="flex justify-center gap-4 mt-8">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={onRetry}
-          className="w-full mt-8 px-6 py-3 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
+          className="px-6 py-2 bg-gray-100 text-gray-600 rounded-full font-medium text-lg 
+            hover:bg-gradient-to-r hover:from-brand-primary hover:to-brand-secondary hover:text-white 
+            transition-all duration-300 w-1/4"
         >
           重新测试
         </motion.button>
-      )}
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onShare}
+          className="px-6 py-2 bg-gradient-to-r from-brand-primary to-brand-secondary text-white 
+            rounded-full font-medium text-lg transition-all duration-300 w-1/4 flex items-center justify-center gap-2"
+        >
+          <Share2 size={20} />
+          分享结果
+        </motion.button>
+      </div>
     </motion.div>
   );
 } 
